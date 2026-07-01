@@ -17,20 +17,18 @@ const winPatterns = [
 ];
 
 const restartGame = () => {
-  msg.innerText = "Congratulations..Winner ";
+  gameOver = false;
   enableBoxes();
   msgContainer.classList.add("hide");
 };
 rstBtn.forEach((Btn) => {
   Btn.addEventListener("click", () => {
     restartGame();
-    console.log("game refreshed");
   });
 });
 
 boxes.forEach((box) => {
   box.addEventListener("click", () => {
-    console.log("box was clicked");
     box.style.backgroundColor = "white";
     if (turnO) {
       box.innerText = "O";
@@ -44,6 +42,9 @@ boxes.forEach((box) => {
     box.disabled = true;
 
     checkWinner();
+    
+    checkDraw();
+    
   });
 });
 
@@ -58,10 +59,13 @@ const enableBoxes = () => {
     box.innerText = "";
   }
 };
+let gameOver = false;
+
 const showWinner = (winner) => {
-  msg.innerText = msg.innerText + `${winner}`;
+  msg.innerText =  `🎉 Congratulations..Winner ${winner}`;
   msgContainer.classList.remove("hide");
   disableBoxes();
+  gameOver = true;
 };
 
 const checkWinner = () => {
@@ -74,7 +78,23 @@ const checkWinner = () => {
       if (pos1 == pos2 && pos2 == pos3) {
         console.log("Winnerr..", pos1);
         showWinner(pos1);
-      }
+        return;
+      } 
     }
   }
+  
 };
+
+const checkDraw = () => {
+  let isDraw = true;
+  boxes.forEach((box) => {
+    if(box.innerText === ""){
+      isDraw = false;
+    }
+  });
+  if( isDraw && !gameOver){
+    msg.innerText = " 🤝 It is Draw";
+    msgContainer.classList.remove("hide");
+    disableBoxes()
+  }
+}
